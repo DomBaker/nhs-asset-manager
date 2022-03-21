@@ -1,20 +1,6 @@
 {% extends "base.html" %}
 {% from 'form_macro.html' import displayField %}
 
-{% block title %}Registration{% endblock %}
-
 {% block content %}
-    <h1>Get started</h1>
-
-    <form action="{{ url_for('index')}}", method="POST" >
-        {{ displayField(form.username, 'Username', autocomplete="off", autofucus=true)}}
-        {{ displayField(form.password, 'Password')}}
-        {{ displayField(form.cfm_password, 'Retype Password')}}
-        <div>
-            {{ form.submit_button }}
-        </div>
-        
-
-        {{ form.csrf_token }}
-    </form>
+<h1>Login</h1>
 {% endblock %}

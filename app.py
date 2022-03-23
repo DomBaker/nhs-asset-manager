@@ -1,10 +1,15 @@
 from flask import Flask, render_template
+from passlib.hash import sha256_crypt
 
-from registration import *
+from forms import *
+from models import *
 
 #config app
 app = Flask(__name__)
 app.secret_key = 'dom'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://diatkvddiwuhvr:2c168535c8d127354f6eb87e0a8ca63b400705f148eb34708fcdf653923f7b35@ec2-34-255-21-191.eu-west-1.compute.amazonaws.com:5432/d2fitfd02u1pu4'
+
+database = SQLAlchemy(app)
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
@@ -14,7 +19,24 @@ def index():
 def register():
     registration = RegForm()
     if registration.validate_on_submit():
-        return render_template('success.html')
+        email = registration.email.data
+        fname = registration.fname.data
+        lname = registration.lname.data
+        position = registration.position.data
+        password = registration.password.data
+
+        #check existance
+        user_object = User.query.filter_by(email=email).first()
+
+        if user_object:
+            return "This email is already used, please try recover your account"
+
+        user = User(email=email, fname=fname, lname=lname, position=position, password=password)
+        database.session.add(user)
+        database.session.commit()
+        return "successfully added to db"
+
+
     return render_template('register.html', form=registration)
 
 @app.route("/dashboard")

@@ -27,15 +27,13 @@ def register():
 
         #check existance
         user_object = User.query.filter_by(email=email).first()
-
-        if user_object:
-            return "This email is already used, please try recover your account"
-
         user = User(email=email, fname=fname, lname=lname, position=position, password=password)
-        database.session.add(user)
-        database.session.commit()
-        return "successfully added to db"
 
+        database.session.add(user)
+        #commit the changes to the database
+        database.session.commit()
+        
+        return render_template('success.html')
 
     return render_template('register.html', form=registration)
 

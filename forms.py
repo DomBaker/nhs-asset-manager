@@ -18,7 +18,7 @@ def invalid_creds(form, field):
 
     user_object = User.query.filter_by(email=email_entered).first()
     if user_object is None:
-        raise ValidationError("Email or password is incorrect")
+        raise ValidationError("Enter a registered email and password")
     elif not pbkdf2_sha256.verify(password_entered, user_object.password):
         raise ValidationError("Email or password is incorrect")
         

@@ -2,10 +2,12 @@ from enum import unique
 from sqlite3 import sqlite_version_info
 from urllib.request import DataHandler
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import UserMixin
 
 database = SQLAlchemy()
 
-class User(database.Model):
+#Using UserMixin for additional functionality
+class User(UserMixin, database.Model):
     """ USER MODEL """
 
     __tablename__ = "users"

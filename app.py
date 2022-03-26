@@ -1,5 +1,5 @@
 from flask import Flask, render_template, redirect, url_for
-from passlib.hash import pbkdf2_sha256
+from flask_login import LoginManager, login_user, current_user, login_required, logout_user
 
 from forms import *
 from models import *
@@ -11,9 +11,21 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://diatkvddiwuhvr:2c168535c8d
 
 database = SQLAlchemy(app)
 
+login = LoginManager(app)
+login.init_app(app)
+
+@login.user_loader
+def load_user(id):
+
+    User.query.get(int(id))
+
 @app.route("/", methods=['GET', 'POST'])
 def index():
     return render_template('index.html')
+
+@app.route("/splash", methods=['GET', 'POST'])
+def splash():
+    return render_template('splash.html')
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
@@ -47,9 +59,28 @@ def login():
     login_form = LoginForm()
 
     if login_form.validate_on_submit():
-        return render_template('dashboard.html')
+        user_object = User.query.filter_by(email=login_form.email.data).first()
+
+        login_user(user_object)
+        return redirect(url_for('dashboard'))
     
     return render_template('login.html', form=login_form)
+
+@app.route("/dashboard", methods=['GET', 'POST'])
+def dashboard():
+
+    if not current_user.is_authenticated:
+        return redirect(url_for('splash')) 
+
+    return render_template('dashboard.html')
+
+
+@app.route("/logout", methods=['GET'])
+def logout():
+
+    logout_user()
+    return "logged out"
+     
 
 if __name__ == "__main__":
     app.run(debug=True)

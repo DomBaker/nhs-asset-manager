@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect, url_for
 from passlib.hash import sha256_crypt
 
 from forms import *
@@ -17,7 +17,9 @@ def index():
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
+    
     registration = RegForm()
+
     if registration.validate_on_submit():
         email = registration.email.data
         fname = registration.fname.data
@@ -33,14 +35,19 @@ def register():
         #commit the changes to the database
         database.session.commit()
         
-        return render_template('success.html')
+        return redirect(url_for('login'))
 
     return render_template('register.html', form=registration)
 
-@app.route("/dashboard")
-def dashboard():
-    return render_template("dashboard.html")
+@app.route("/login", methods=['GET', 'POST'])
+def login():
 
+    login_form = LoginForm()
+
+    if login_form.validate_on_submit():
+        return render_template('dashboard.html')
+    
+    return render_template('login.html', form=login_form)
 
 if __name__ == "__main__":
     app.run(debug=True)

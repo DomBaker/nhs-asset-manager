@@ -1,5 +1,5 @@
 from flask import Flask, render_template, redirect, url_for
-from passlib.hash import sha256_crypt
+from passlib.hash import pbkdf2_sha256
 
 from forms import *
 from models import *
@@ -17,7 +17,7 @@ def index():
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
-    
+
     registration = RegForm()
 
     if registration.validate_on_submit():
@@ -27,9 +27,11 @@ def register():
         position = registration.position.data
         password = registration.password.data
 
+        secure_password = pbkdf2_sha256.hash(password)
+
         #check existance
         user_object = User.query.filter_by(email=email).first()
-        user = User(email=email, fname=fname, lname=lname, position=position, password=password)
+        user = User(email=email, fname=fname, lname=lname, position=position, password=secure_password)
 
         database.session.add(user)
         #commit the changes to the database

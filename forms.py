@@ -44,5 +44,5 @@ class LoginForm(FlaskForm):
     """ This is the login form """
 
     email = EmailField('email_label', validators=[InputRequired(message="Your email is required to login")])
-    password = StringField('password_label', validators=[InputRequired(message="Your password is required to login"), invalid_creds])
+    password = PasswordField('password_label', validators=[InputRequired(message="Your password is required to login"), invalid_creds])
     submit_button = SubmitField('Login')

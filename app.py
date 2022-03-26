@@ -16,12 +16,11 @@ login.init_app(app)
 
 @login.user_loader
 def load_user(id):
-
-    User.query.get(int(id))
+    return User.query.get(int(id))
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
-    return render_template('index.html')
+    return redirect(url_for('login'))
 
 @app.route("/splash", methods=['GET', 'POST'])
 def splash():
@@ -70,7 +69,7 @@ def login():
 def dashboard():
 
     if not current_user.is_authenticated:
-        return redirect(url_for('splash')) 
+        return redirect(url_for('splash'))
 
     return render_template('dashboard.html')
 
@@ -79,7 +78,7 @@ def dashboard():
 def logout():
 
     logout_user()
-    return "logged out"
+    return redirect(url_for('login'))
      
 
 if __name__ == "__main__":

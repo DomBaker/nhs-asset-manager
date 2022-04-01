@@ -81,13 +81,15 @@ def dashboard():
 
     return render_template('dashboard.html')
 
-@app.route("/account", methods=['GET', 'POST'])
-def account():
+@app.route("/account/<id>", methods=['GET', 'POST'])
+def account(id):
     
+    current_user = database.session.query(User).filter_by(id=id).first()
+
     if not current_user.is_authenticated:
         return redirect(url_for('splash'))
 
-    return render_template('account.html')
+    return render_template('account.html', current_user=current_user)
 
 @app.route("/issues", methods=['GET', 'POST'])
 def issues():
@@ -102,6 +104,12 @@ def logout():
 
     logout_user()
     return redirect(url_for('login'))
+
+@app.route("/current-assets", methods=['GET', 'POST'])
+def current_assets():
+
+
+    return render_template('current-assets.html')
      
 
 if __name__ == "__main__":

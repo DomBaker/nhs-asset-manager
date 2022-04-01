@@ -1,9 +1,32 @@
 {% extends "base.html" %}
+{% from 'form_macro.html' import displayField %}
 
 {% block title %}Account{% endblock %}
 
 {% block content %}
+<h1>Account Information</h1>
+<h2>User ID: {{ current_user.id }}</h2>
 
+
+<label>Position: {{ current_user.position }}</label>
+
+<form action="{{ url_for('account')}}", method="POST" >
+    {{ displayField(form.email, 'Email', autocomplete="off", autofucus=true)}}
+    <label>First Name: {{ current_user.fname }}</label>
+    {{ displayField(form.fname, 'First Name')}}
+    <label>Last Name: {{ current_user.lname }}</label>
+    {{ displayField(form.lname, 'Last Name')}}
+    <label>Position: {{ current_user.position }}</label>
+    {{ displayField(form.position, 'Job Role')}}
+    {{ displayField(form.password, 'Password')}}
+    {{ displayField(form.cfm_password, 'Retype Password')}}
+    <div>
+        {{ form.submit_button(class_="nhsuk-button") }}
+    </div>
+    
+
+    {{ form.csrf_token }}
+</form>
 
 
 {% endblock %}

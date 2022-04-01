@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Current Assets{% endblock %}
+
+{% block content %}
+<h1>Current assets</h1>
+<table class="nhsuk-table">
+    <caption class="nhsuk-table__caption">Assets assigned to you</caption>
+    <thead role="rowgroup" class="nhsuk-table__head">
+      <tr role="row">
+        <th role="columnheader" class="" scope="col">
+            ID
+        </th>
+        <th role="columnheader" class="" scope="col">
+            Owner ID
+        </th>
+        <th role="columnheader" class="" scope="col">
+            Asset Name
+        </th>
+        <th role="columnheader" class="" scope="col">
+            Asset Type
+        </th>
+        <th role="columnheader" class="" scope="col">
+            Serial Number
+        </th>
+        <th role="columnheader" class="" scope="col">
+            Actions
+        </th>   
+      </tr>
+    </thead>
+    <tbody class="nhsuk-table__body">
+        {% for asset in assets %}
+      <tr role="row" class="nhsuk-table__row">
+        <td class="nhsuk-table__cell">{{ assets.id }}</td>
+        <td class="nhsuk-table__cell ">{{ asset.owner_id }}</td>
+        <td class="nhsuk-table__cell ">{{ asset.asset_name }}</td>
+        <td class="nhsuk-table__cell ">{{ asset.asset_type }}</td>
+        <td class="nhsuk-table__cell ">{{ asset.serial_number }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  
+{% endblock %}

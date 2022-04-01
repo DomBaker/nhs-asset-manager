@@ -26,6 +26,6 @@ class Assets(database.Model):
     asset_type = database.Column(database.String(), nullable=False)
     serial_number = database.Column(database.Integer, nullable=False)
     is_owned = database.Column(database.Boolean, unique=False, default=False)
-database.create_all()
+#database.create_all()
 
 #database.drop_all()

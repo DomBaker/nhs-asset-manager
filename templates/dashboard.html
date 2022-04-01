@@ -10,7 +10,7 @@
           <h2 class="nhsuk-card__heading nhsuk-heading-m">
             <a class="nhsuk-card__link" href="#">My current assets</a>
           </h2>
-          <p class="nhsuk-card__description">A quick guide for people who have care and support needs and their carers</p>
+          <p class="nhsuk-card__description">Your assets that are currently assigned to you</p>
         </div>
       </div>
   
@@ -22,7 +22,7 @@
           <h2 class="nhsuk-card__heading nhsuk-heading-m">
             <a class="nhsuk-card__link" href="#">Available assets</a>
           </h2>
-          <p class="nhsuk-card__description">Includes helplines, needs assessments, advocacy and reporting abuse</p>
+          <p class="nhsuk-card__description">Assets that are available currently</p>
         </div>
       </div>
   
@@ -34,10 +34,24 @@
           <h2 class="nhsuk-card__heading nhsuk-heading-m">
             <a class="nhsuk-card__link" href="#">Company wide asset register</a>
           </h2>
-          <p class="nhsuk-card__description">How to pay for care and support, and where you can get help with costs</p>
+          <p class="nhsuk-card__description">A company wide register that contains all assets within NHS Digital</p>
         </div>
       </div>
   
     </li>
+    {% if current_user.is_authenticated  and current_user.is_admin == True %}
+    <li class="nhsuk-grid-column-one-half nhsuk-card-group__item">
+  
+      <div class="nhsuk-card nhsuk-card--clickable">
+        <div class="nhsuk-card__content">
+          <h2 class="nhsuk-card__heading nhsuk-heading-m">
+            <a class="nhsuk-card__link" href="#">Admin asset panel</a>
+          </h2>
+          <p class="nhsuk-card__description">Add, delete, update and maintain assets</p>
+        </div>
+      </div>
+  
+    </li>
+    {% endif %}
   </ul>
 {% endblock %}

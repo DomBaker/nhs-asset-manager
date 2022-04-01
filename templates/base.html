@@ -81,6 +81,7 @@
               </svg>
             </a>
           </li>
+          {% if not current_user.is_authenticated %}
           <li class="nhsuk-header__navigation-item">
             <a class="nhsuk-header__navigation-link" href="/register">
               Register
@@ -89,6 +90,7 @@
               </svg>
             </a>
           </li>
+          {% endif %}
           {% if current_user.is_authenticated %}
           <li class="nhsuk-header__navigation-item">
             <a class="nhsuk-header__navigation-link" href="/account">

@@ -10,7 +10,6 @@ app = Flask(__name__)
 app.secret_key = 'dom'
 #need to use some form of security on this 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://diatkvddiwuhvr:2c168535c8d127354f6eb87e0a8ca63b400705f148eb34708fcdf653923f7b35@ec2-34-255-21-191.eu-west-1.compute.amazonaws.com:5432/d2fitfd02u1pu4'
-
 database = SQLAlchemy(app)
 
 login = LoginManager(app)
@@ -25,6 +24,9 @@ def load_user(id):
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
+    if current_user.is_authenticated:
+        return redirect(url_for('dashboard'))
+
     return redirect(url_for('login'))
 
 #Splash route for displaying more use friendly login required type page.

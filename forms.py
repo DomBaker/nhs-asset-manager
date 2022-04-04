@@ -55,9 +55,14 @@ class UpdateForm(FlaskForm):
     position = StringField('position_label', validators=[InputRequired(message="Please input your job role")])
     password = PasswordField('password_label', validators=[InputRequired(message="A password is requred"), Length(min= 8, max=150, message="Password must be between 8 and 45 characters")])
     cfm_password = PasswordField('cfm_password_label', validators=[InputRequired(message="A username is requred"), EqualTo('password', message="passwords must match")])
-    submit_button = SubmitField('Create Account')
+    submit_button = SubmitField('Update Account')
     #Second custom validator
     def validate_email(self, email):
         user_object = User.query.filter_by(email=email.data).first()
         if user_object:
             raise ValidationError("Email is already used, Please try logging in or use a different email address")
+
+class UpdateCurrentAssets(FlaskForm):
+    """This is the Update Current Assets Form"""
+
+    upassign_button = SubmitField('Unassign')

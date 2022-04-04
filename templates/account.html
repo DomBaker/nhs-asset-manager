@@ -7,10 +7,8 @@
 <h1>Account Information</h1>
 <h2>User ID: {{ current_user.id }}</h2>
 
-
-<label>Position: {{ current_user.position }}</label>
-
 <form action="{{ url_for('account')}}", method="POST" >
+    <label>Email: {{ current_user.email }}</label>
     {{ displayField(form.email, 'Email', autocomplete="off", autofucus=true)}}
     <label>First Name: {{ current_user.fname }}</label>
     {{ displayField(form.fname, 'First Name')}}

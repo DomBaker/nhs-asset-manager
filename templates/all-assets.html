@@ -1,11 +1,12 @@
 {% extends "base.html" %}
 
-{% block title %}Current Assets{% endblock %}
+{% block title %}All Assets{% endblock %}
 
 {% block content %}
-<h1>Current assets</h1>
+
+<h1>All assets</h1>
 <table class="nhsuk-table">
-    <caption class="nhsuk-table__caption">Assets assigned to you</caption>
+    <caption class="nhsuk-table__caption">All assets company wide</caption>
     <thead role="rowgroup" class="nhsuk-table__head">
       <tr role="row">
         <th role="columnheader" class="" scope="col">
@@ -22,15 +23,11 @@
         </th>
         <th role="columnheader" class="" scope="col">
             Serial Number
-        </th>
-        <th role="columnheader" class="" scope="col">
-            Actions
-        </th>   
+        </th>  
       </tr>
     </thead>
     <tbody class="nhsuk-table__body">
         {% for asset in assets %}
-        {% if asset.owner_id == current_user.id %}
       <tr role="row" class="nhsuk-table__row">
         <td class="nhsuk-table__cell">{{ asset.id }}</td>
         <td class="nhsuk-table__cell ">{{ asset.owner_id }}</td>
@@ -38,13 +35,8 @@
         <td class="nhsuk-table__cell ">{{ asset.asset_type }}</td>
         <td class="nhsuk-table__cell ">{{ asset.serial_number }}</td>
       </tr>
-      {% endif %}
       {% endfor %}
     </tbody>
   </table>
 
-  <form action="/dashboard">
-    <input class="nhsuk-button" type="submit" value="Back to dashboard" />
-</form>
-  
 {% endblock %}

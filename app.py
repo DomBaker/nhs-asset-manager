@@ -1,5 +1,6 @@
 from flask import Flask, render_template, redirect, url_for
 from flask_login import LoginManager, login_user, current_user, logout_user
+import os
 
 from forms import *
 from models import *
@@ -8,8 +9,8 @@ from models import *
 app = Flask(__name__)
 #needs some kind of security on this
 app.secret_key = 'dom'
-#need to use some form of security on this 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://diatkvddiwuhvr:2c168535c8d127354f6eb87e0a8ca63b400705f148eb34708fcdf653923f7b35@ec2-34-255-21-191.eu-west-1.compute.amazonaws.com:5432/d2fitfd02u1pu4'
+#hidden db URI stored directly in Heroku config vars - exported to local machine to run locally.
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URI")
 database = SQLAlchemy(app)
 
 login = LoginManager(app)
@@ -85,8 +86,16 @@ def dashboard():
 def account():
 
     update_form = UpdateForm()
-    
     current_user = database.session.query(User).first()
+
+    if update_form.validate_on_submit():
+        email = update_form.email.data
+        fname = update_form.fname.data
+        lname = update_form.lname.data
+        position = update_form.position.data
+        password = update_form.password.data
+        
+        
 
     if not current_user.is_authenticated:
         return redirect(url_for('splash'))
@@ -107,12 +116,18 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
-@app.route("/current-assets", methods=['GET', 'POST'])
+@app.route("/dashboard/current-assets", methods=['GET', 'POST'])
 def current_assets():
-    assets = Assets.query
+    assets = Assets.query.all()
 
-    return render_template('current-assets.html')
-     
+    return render_template('current-assets.html', assets=assets)
+
+@app.route("/dashboard/all-assets", methods=['GET', 'POST'])
+def all_assets():
+    assets = Assets.query.all()
+
+    return render_template('all-assets.html', assets=assets)
+
 
 if __name__ == "__main__":
     app.run(debug=True)

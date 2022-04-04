@@ -26,4 +26,10 @@
 </form>
 
 
+{% if current_user.is_admin%}
+<h2>Admin Status: {{ current_user.is_admin }}</h2>
+<button class="nhsuk-button" type="button">Revoke admin status</button>
+{% endif %}
+
+
 {% endblock %}

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for
+from flask import Flask, render_template, redirect, url_for, flash, request
 from flask_login import LoginManager, login_user, current_user, logout_user
 import os
 
@@ -88,13 +88,15 @@ def dashboard():
 
     return render_template('dashboard.html')
 
-@app.route("/account/", methods=['GET', 'POST'])
+@app.route("/account", methods=['GET', 'POST'])
 def account():
 
     update_form = UpdateForm()
-    update_user = database.session.query(User).filter_by(id=current_user.id)
-
-    if update_form.validate_on_submit():
+    #Bit messy but works, could do with refactoring
+    user_now = current_user.id
+    update_user = database.session.query(User).filter_by(id=user_now).first()
+    
+    if request.method == 'POST' and update_form.validate_on_submit():
         update_user.fname = update_form.fname.data
         update_user.lname = update_form.lname.data
         update_user.position = update_form.position.data
@@ -104,6 +106,10 @@ def account():
 
         #commit the changes to the database
         database.session.commit()
+
+        flash('details updated successfully')
+
+        return redirect(url_for('account'))
         
 
     if not current_user.is_authenticated:
@@ -123,13 +129,25 @@ def issues():
 def logout():
 
     logout_user()
+    flash('successfully logged out.')
     return redirect(url_for('login'))
 
 @app.route("/dashboard/current-assets", methods=['GET', 'POST'])
 def current_assets():
+    form = UpdateCurrentAssets()
+
+    #probably a better way of doing this by filtering out the current users id and comparing with owner_id instead of returning full table
     assets = Assets.query.all()
 
-    return render_template('current-assets.html', assets=assets)
+    #similar check to what is in the template, better to use backend logic for checks
+    for asset in assets:
+        if asset.owner_id == current_user.id:
+            if request.method == 'POST' and form.validate_on_submit():
+                asset.owner_id == None
+                database.session.commit()
+                flash('Successfully unassigned')
+
+    return render_template('current-assets.html', assets=assets, form=form)
 
 @app.route("/dashboard/all-assets", methods=['GET', 'POST'])
 def all_assets():

@@ -49,9 +49,9 @@ class LoginForm(FlaskForm):
 class UpdateForm(FlaskForm):
     """This is the Update Record Form"""
 
-    fname = StringField('fname_label')
-    lname = StringField('lname_label')
-    position = StringField('position_label')
+    fname = StringField('fname_label', validators=[InputRequired(message="Please input your first name")])
+    lname = StringField('lname_label', validators=[InputRequired(message="Please input your last name")])
+    position = StringField('position_label', validators=[InputRequired(message="Please your new position")])
     password = PasswordField('password_label', validators=[Length(min= 8, max=150, message="Password must be between 8 and 45 characters")])
     cfm_password = PasswordField('cfm_password_label', validators=[EqualTo('password', message="passwords must match")])
     submit_button = SubmitField('Update Account')
@@ -59,4 +59,4 @@ class UpdateForm(FlaskForm):
 class UpdateCurrentAssets(FlaskForm):
     """This is the Update Current Assets Form"""
 
-    upassign_button = SubmitField('Unassign')
+    unassign_button = SubmitField('Unassign')

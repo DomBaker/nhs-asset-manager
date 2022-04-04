@@ -10,7 +10,7 @@ app = Flask(__name__)
 #needs some kind of security on this
 app.secret_key = 'dom'
 #hidden db URI stored directly in Heroku config vars - exported to local machine to run locally.
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URI")
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE")
 database = SQLAlchemy(app)
 
 login = LoginManager(app)

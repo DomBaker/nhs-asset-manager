@@ -6,10 +6,9 @@
 {% block content %}
 <h1>Account Information</h1>
 <h2>User ID: {{ current_user.id }}</h2>
+<h2>Email: {{ current_user.email }}</h2>
 
 <form action="{{ url_for('account')}}", method="POST" >
-    <label>Email: {{ current_user.email }}</label>
-    {{ displayField(form.email, 'Email', autocomplete="off", autofucus=true)}}
     <label>First Name: {{ current_user.fname }}</label>
     {{ displayField(form.fname, 'First Name')}}
     <label>Last Name: {{ current_user.lname }}</label>

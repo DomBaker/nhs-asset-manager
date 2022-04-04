@@ -8,7 +8,7 @@ from models import *
 #config app
 app = Flask(__name__)
 #needs some kind of security on this
-app.secret_key = 'dom'
+app.secret_key = os.environ.get('SECRET_KEY')
 #hidden db URI stored directly in Heroku config vars - exported to local machine to run locally.
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE")
 database = SQLAlchemy(app)
@@ -35,6 +35,10 @@ def index():
 def splash():
     return render_template('splash.html')
 
+@app.route("/splash-out", methods=['GET', 'POST'])
+def splashout():
+    return render_template('splash-out.html')
+
 @app.route("/register", methods=['GET', 'POST'])
 def register():
 
@@ -50,7 +54,7 @@ def register():
         secure_password = pbkdf2_sha256.hash(password)
 
         #check existance
-        user_object = User.query.filter_by(email=email).first()
+        User.query.filter_by(email=email).first()
         user = User(email=email, fname=fname, lname=lname, position=position, password=secure_password)
 
         database.session.add(user)
@@ -65,6 +69,8 @@ def register():
 def login():
 
     login_form = LoginForm()
+    if current_user.is_authenticated:
+        return redirect(url_for('splashout'))
 
     if login_form.validate_on_submit():
         user_object = User.query.filter_by(email=login_form.email.data).first()
@@ -86,15 +92,18 @@ def dashboard():
 def account():
 
     update_form = UpdateForm()
-    current_user = database.session.query(User).first()
+    update_user = database.session.query(User).filter_by(id=current_user.id)
 
     if update_form.validate_on_submit():
-        email = update_form.email.data
-        fname = update_form.fname.data
-        lname = update_form.lname.data
-        position = update_form.position.data
+        update_user.fname = update_form.fname.data
+        update_user.lname = update_form.lname.data
+        update_user.position = update_form.position.data
         password = update_form.password.data
         
+        update_user.password = pbkdf2_sha256.hash(password)
+
+        #commit the changes to the database
+        database.session.commit()
         
 
     if not current_user.is_authenticated:

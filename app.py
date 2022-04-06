@@ -52,7 +52,7 @@ def admin_splash():
 @app.route("/register", methods=['GET', 'POST'])
 def register():
 
-    registration = RegForm()
+    registration = UserForm()
 
     if registration.validate_on_submit():
         email = registration.email.data
@@ -90,7 +90,7 @@ def login():
     
     return render_template('login.html', form=login_form)
 
-@app.route("/dashboard", methods=['GET', 'POST'])
+@app.route("/dashboard", methods=['GET'])
 def dashboard():
 
     if not current_user.is_authenticated:
@@ -98,36 +98,66 @@ def dashboard():
 
     return render_template('dashboard.html')
 
-@app.route("/account", methods=['GET', 'POST'])
-def account():
+@app.route("/account/<int:id>", methods=['GET', 'POST'])
+def account(id):
+    #instantiate a form & db query
+    update_form = UserForm()
+    user_to_update = database.session.query(User).get_or_404(id)
 
-    update_form = UpdateForm()
-    #Bit messy but works, could do with refactoring
-    user_now = current_user.id
-    update_user = database.session.query(User).filter_by(id=user_now).first()
-    
-    if request.method == 'POST' and update_form.validate_on_submit():
+    if not current_user.is_authenticated:
 
-        #have to convert this to bool as return type of SelectField is a string
-        update_user.is_admin = bool(update_form.is_admin.data)
-        update_user.fname = update_form.fname.data
-        update_user.lname = update_form.lname.data
-        update_user.position = update_form.position.data
-        password = update_form.password.data
-        
-        update_user.password = pbkdf2_sha256.hash(password)
+        return redirect(url_for('splash'))
 
-        #commit the changes to the database
-        database.session.commit()
+    elif request.method == 'GET':
+        #pre-populate the form with the current user values
+        update_form.email.data = current_user.email
+        update_form.fname.data = current_user.fname
+        update_form.lname.data = current_user.lname
+        update_form.position.data = current_user.position
 
-        flash('details updated successfully')
+        return render_template('account.html', form=update_form, user_to_update=user_to_update)
 
-        return redirect(url_for('account'))
-        
+    elif request.method == 'POST':
+        user_to_update.email = request.form['email']
+        user_to_update.fname = request.form['fname']
+        user_to_update.lname = request.form['lname']
+        user_to_update.position = request.form['position']
+        password = request.form['password']
+
+        user_to_update.password = pbkdf2_sha256.hash(password)
+
+        try:
+            database.session.commit()
+            flash('User updated')
+            return redirect(url_for('account', id=current_user.id))
+        except:
+            flash('User failed to update')
+            return redirect(url_for('account'))
+    else:
+        return render_template('account.html', form=update_form, user_to_update=user_to_update)
+
+@app.route("/account/delete", methods=['GET'])
+def account_delete():
+    update_form = UserForm()
     if not current_user.is_authenticated:
         return redirect(url_for('splash'))
 
-    return render_template('account.html', form=update_form)
+    return render_template('delete-account.html', form=update_form) 
+    
+
+@app.route('/delete-account/<int:id>', methods=['GET','POST'])
+def account_gone(id):
+    form = UserForm()
+    account_to_delete = database.session.query(User).get_or_404(id)
+
+    try:
+        database.session.delete(account_to_delete)
+        database.session.commit()
+        flash("User deleted.")
+        return render_template('login.html', form=form, account_to_delete=account_to_delete)
+    except:
+        flash("Unable to delete account right now, try again.")
+ 
 
 @app.route("/logout", methods=['GET'])
 def logout():
@@ -136,22 +166,21 @@ def logout():
     flash('successfully logged out.')
     return redirect(url_for('login'))
 
+
 @app.route("/dashboard/current-assets", methods=['GET', 'POST'])
 def current_assets():
-    form = UpdateCurrentAssets()
-
-    #probably a better way of doing this by filtering out the current users id and comparing with owner_id instead of returning full table
+    
     assets = database.session.query(Assets).filter_by(owner_id=current_user.id).all()
 
     #similar check to what is in the template, better to use backend logic for checks
-    if request.method == 'POST' and form.validate_on_submit():
+    if request.method == 'POST':
         assets.owner_id == None
         database.session.commit()
         flash('Successfully unassigned')
 
         return redirect(url_for('current_assets'))
         
-    return render_template('current-assets.html', assets=assets, form=form)
+    return render_template('current-assets.html', assets=assets)
 
 @app.route("/dashboard/all-assets", methods=['GET'])
 def all_assets():
@@ -177,13 +206,14 @@ def admin_assets():
     if current_user.is_admin:
         if form.validate_on_submit():
             asset_name = form.asset_name.data
+            owner_id = form.owner_id.data
             asset_type = form.asset_type.data
             serial_number = form.serial_number.data 
 
-            some_serial =Assets.query.filter_by(serial_number=serial_number).first()
+            some_serial = Assets.query.filter_by(serial_number=serial_number).first()
             if some_serial == serial_number:
                 flash('Serial number already assigned to asset')
-            asset = Assets(asset_name=asset_name, asset_type=asset_type, serial_number=serial_number)
+            asset = Assets(asset_name=asset_name, owner_id=owner_id, asset_type=asset_type, serial_number=serial_number)
 
             database.session.add(asset)
             database.session.commit()
@@ -193,6 +223,7 @@ def admin_assets():
         return redirect(url_for('splashout'))
 
     return render_template('admin-assets.html', form=form)
+
 
 if __name__ == "__main__":
     app.run(debug=True)

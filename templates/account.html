@@ -1,16 +1,17 @@
 {% extends "base.html" %}
 {% from 'form_macro.html' import displayField %}
 
-{% block title %}Account{% endblock %}
+{% block title %}Update Account Information{% endblock %}
 
 {% block content %}
-<h1>Account Information</h1>
+<h1>Update Account Information</h1>
 <h2>User ID: {{ current_user.id }}</h2>
-<h2>Email: {{ current_user.email }}</h2>
 
-<form action="{{ url_for('account')}}", method="POST" >
-    <label>Select account type</label>
-    {{ displayField(form.is_admin)}}
+<form method="POST" >
+    <!--<label>Select account type</label>
+    {{ displayField(form.is_admin)}}-->
+    <label>Email: {{ current_user.email }}</label>
+    {{ displayField(form.email, 'Email')}}
     <label>First Name: {{ current_user.fname }}</label>
     {{ displayField(form.fname, 'First Name')}}
     <label>Last Name: {{ current_user.lname }}</label>
@@ -26,5 +27,10 @@
 
     {{ form.csrf_token }}
 </form>
+
+<hr class="nhsuk-section-break nhsuk-section-break--xl nhsuk-section-break--visible">
+<section class="nhsuk-section">
+    <p>Are you looking to delete your account? click <a href="/account/delete">here</a>.</p>
+</section>
 
 {% endblock %}

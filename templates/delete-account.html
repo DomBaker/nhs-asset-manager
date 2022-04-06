@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Delete Account{% endblock %}
+
+{% block content %}
+<h1>Are you sure you wish to delete your account?</h1>
+<p>If you delete your account will be deleted and you will be required to re-register</p>
+
+
+<div>
+    <a class="nhsuk-button" href="/delete-account/{{ current_user.id }}">Delete</a>
+</div>
+
+<p>If you don't wish to delete your account please return to <a href="/dashboard">dashboard</a>.</p>
+
+
+{% endblock %}

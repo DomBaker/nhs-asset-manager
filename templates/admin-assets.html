@@ -6,12 +6,11 @@
 {% block content %}
 <section class="nhsuk-section">
 
-    </section>
-
     <h1>Register assets</h1>
 
     <form action="{{ url_for('admin_assets')}}", method="POST" >
         {{ displayField(form.asset_name, 'Asset Name', autocomplete="off", autofucus=true)}}
+        {{ displayField(form.owner_id, 'Owner ID')}}
         {{ displayField(form.asset_type)}}
         {{ displayField(form.serial_number, 'Serial Number')}}
         <div>
@@ -20,8 +19,13 @@
         
         {{ form.csrf_token }}
     </form>
+</section>
 
-    <hr class="nhsuk-section-break nhsuk-section-break--xl nhsuk-section-break--visible">
-    <section class="nhsuk-section"></section>
+<hr class="nhsuk-section-break nhsuk-section-break--xl nhsuk-section-break--visible">
+<section class="nhsuk-section">
+    <form action="/dashboard">
+        <input class="nhsuk-button" type="submit" value="Back to dashboard" />
+    </form>
+</section>
 
 {% endblock %}

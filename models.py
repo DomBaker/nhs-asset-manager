@@ -4,6 +4,7 @@ from flask_login import UserMixin
 
 #from app import database
 
+# For some reason Heroku doesn't like imported versions of this so had to re-ref SQLAlchemy in this file.
 database = SQLAlchemy()
 
 #Using UserMixin for additional functionality
@@ -28,7 +29,6 @@ class Assets(database.Model):
     owner_id = database.Column(database.Integer, database.ForeignKey('users.id'), nullable=True)
     asset_type = database.Column(database.String(), nullable=False)
     serial_number = database.Column(database.Integer, unique=True, nullable=False)
-    is_owned = database.Column(database.Boolean, unique=False, default=False)
 
 #database.create_all()
 

@@ -13,3 +13,20 @@ The frontend is heavy based on the [NHSUK frontend](https://github.com/nhsuk/nhs
 - [Heroku](https://devcenter.heroku.com/)
 - [Postgres](https://www.postgresql.org/docs/)
 
+
+## users
+
+### Admin user
+- Email: admin@user.com
+- Password testing123
+### standard user
+- Email: standard@user.com
+- Password testing123
+
+Also feel free to create your own standard user.
+
+### Dummy users
+Within the application you will find an array of dummy users these accounts can't be logged into as they're there for testing purpose only.
+
+
+

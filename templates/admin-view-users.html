@@ -22,18 +22,24 @@
         </th>
         <th role="columnheader" class="" scope="col">
             Position
-        </th>  
+        </th>
+        <th role="columnheader" class="" scope="col">
+          Action
+      </th> 
       </tr>
     </thead>
     <tbody class="nhsuk-table__body">
         {% for user in all_users %}
+        {% if current_user != user %}
       <tr role="row" class="nhsuk-table__row">
         <td class="nhsuk-table__cell">{{ user.id }}</td>
         <td class="nhsuk-table__cell ">{{ user.email }}</td>
         <td class="nhsuk-table__cell ">{{ user.fname }}</td>
         <td class="nhsuk-table__cell ">{{ user.lname}}</td>
         <td class="nhsuk-table__cell ">{{ user.position }}</td>
+        <td class="nhsuk-table__cell "><a class="nhsuk-button nhsuk-button--secondary" href="/admin-delete-account/{{ user.id }}">Delete Account</a></td>
       </tr>
+      {% endif %}
       {% endfor %}
     </tbody>
   </table>

@@ -158,6 +158,19 @@ def account_gone(id):
     except:
         flash("Unable to delete account right now, try again.")
 
+@app.route('/admin-delete-account/<int:id>', methods=['GET','POST'])
+def admin_account_gone(id):
+    form = UserForm()
+    account_to_delete = database.session.query(User).get_or_404(id)
+
+    try:
+        database.session.delete(account_to_delete)
+        database.session.commit()
+        flash("User deleted")
+        return render_template('actions/delete-account.html', form=form, account_to_delete=account_to_delete)
+    except:
+        flash("Unable to delete account right now, try again.")
+
 @app.route('/delete-asset/<int:id>', methods=['GET','POST'])
 def asset_gone(id):
     asset_to_delete = database.session.query(Assets).get_or_404(id)
@@ -166,7 +179,7 @@ def asset_gone(id):
         database.session.delete(asset_to_delete)
         database.session.commit()
         flash("Asset deleted")
-        return render_template('all-assets.html', asset_to_delete=asset_to_delete)
+        return render_template('actions/delete-asset.html', asset_to_delete=asset_to_delete)
     except:
         flash("Unable to delete asset as this time, try again.")
 
@@ -179,7 +192,7 @@ def asset_be_gone(id):
     try:
         database.session.commit()
         flash("Asset Un-assigned")
-        return render_template('current-assets.html', asset_to_unassign=asset_to_unassign)
+        return render_template('actions/unassign.html', asset_to_unassign=asset_to_unassign)
     except:
         flash("Unable to unassign asset as this time, try again.")
 
@@ -192,7 +205,7 @@ def asset_be_assigned(id):
     try:
         database.session.commit()
         flash("Asset assigned successfully")
-        return render_template('available-assets.html', asset_to_assign=asset_to_assign)
+        return render_template('actions/assign.html', asset_to_assign=asset_to_assign)
     except:
         flash("Unable to assign asset as this time, try again.")
 

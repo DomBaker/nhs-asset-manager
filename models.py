@@ -2,7 +2,8 @@ from urllib.request import DataHandler
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 
-database = SQLAlchemy()
+from app import database
+
 
 #Using UserMixin for additional functionality
 class User(UserMixin, database.Model):
@@ -25,8 +26,10 @@ class Assets(database.Model):
     asset_name = database.Column(database.String(), nullable=False)
     owner_id = database.Column(database.Integer, database.ForeignKey('users.id'), nullable=True)
     asset_type = database.Column(database.String(), nullable=False)
-    serial_number = database.Column(database.Integer, nullable=False)
+    serial_number = database.Column(database.Integer, unique=True, nullable=False)
     is_owned = database.Column(database.Boolean, unique=False, default=False)
+
 #database.create_all()
 
 #database.drop_all()
+

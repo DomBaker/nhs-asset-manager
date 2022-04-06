@@ -5,6 +5,10 @@ import os
 from forms import *
 from models import *
 
+#With increasing complexity this file could be broken down into it's core sections, I haven't done this as the application is lightweight and unnecessary modularity can prove confusing.
+
+# App config and db setup ---------------------------------------------------------------------------------------
+
 #config app
 app = Flask(__name__)
 #needs some kind of security on this
@@ -16,12 +20,14 @@ database = SQLAlchemy(app)
 login = LoginManager(app)
 login.init_app(app)
 
+
+
 #Used to track which user is logged in.
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
 
-#ROUTES
+#ROUTES ---------------------------------------------------------------------------------------------------------
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
@@ -38,6 +44,10 @@ def splash():
 @app.route("/splash-out", methods=['GET', 'POST'])
 def splashout():
     return render_template('splash-out.html')
+
+@app.route("/admin-splash", methods=['GET', 'POST'])
+def admin_splash():
+    return render_template('admin-splash.html')
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
@@ -97,6 +107,9 @@ def account():
     update_user = database.session.query(User).filter_by(id=user_now).first()
     
     if request.method == 'POST' and update_form.validate_on_submit():
+
+        #have to convert this to bool as return type of SelectField is a string
+        update_user.is_admin = bool(update_form.is_admin.data)
         update_user.fname = update_form.fname.data
         update_user.lname = update_form.lname.data
         update_user.position = update_form.position.data
@@ -111,19 +124,10 @@ def account():
 
         return redirect(url_for('account'))
         
-
     if not current_user.is_authenticated:
         return redirect(url_for('splash'))
 
     return render_template('account.html', form=update_form)
-
-@app.route("/issues", methods=['GET', 'POST'])
-def issues():
-    
-    if not current_user.is_authenticated:
-        return redirect(url_for('splash'))
-
-    return render_template('issues.html')
 
 @app.route("/logout", methods=['GET'])
 def logout():
@@ -137,24 +141,58 @@ def current_assets():
     form = UpdateCurrentAssets()
 
     #probably a better way of doing this by filtering out the current users id and comparing with owner_id instead of returning full table
-    assets = Assets.query.all()
+    assets = database.session.query(Assets).filter_by(owner_id=current_user.id).all()
 
     #similar check to what is in the template, better to use backend logic for checks
-    for asset in assets:
-        if asset.owner_id == current_user.id:
-            if request.method == 'POST' and form.validate_on_submit():
-                asset.owner_id == None
-                database.session.commit()
-                flash('Successfully unassigned')
+    if request.method == 'POST' and form.validate_on_submit():
+        assets.owner_id == None
+        database.session.commit()
+        flash('Successfully unassigned')
 
+        return redirect(url_for('current_assets'))
+        
     return render_template('current-assets.html', assets=assets, form=form)
 
-@app.route("/dashboard/all-assets", methods=['GET', 'POST'])
+@app.route("/dashboard/all-assets", methods=['GET'])
 def all_assets():
-    assets = Assets.query.all()
+
+    if current_user.is_admin and current_user.is_authenticated:
+        assets = Assets.query.all()
 
     return render_template('all-assets.html', assets=assets)
 
+
+@app.route("/admin-view-all-users", methods=['GET', 'POST'])
+def admin_view_all_users():
+    if current_user.is_admin and current_user.is_authenticated:
+        all_users = User.query.all()
+        return render_template('admin-view-users.html', all_users=all_users)
+    else:
+        return redirect(url_for('admin_splash'))
+
+@app.route("/dashboard/admin-assets", methods=['GET', 'POST'])
+def admin_assets():
+    form = AddAsset()
+
+    if current_user.is_admin:
+        if form.validate_on_submit():
+            asset_name = form.asset_name.data
+            asset_type = form.asset_type.data
+            serial_number = form.serial_number.data 
+
+            some_serial =Assets.query.filter_by(serial_number=serial_number).first()
+            if some_serial == serial_number:
+                flash('Serial number already assigned to asset')
+            asset = Assets(asset_name=asset_name, asset_type=asset_type, serial_number=serial_number)
+
+            database.session.add(asset)
+            database.session.commit()
+            flash("Asset successfully added")
+            return redirect(url_for('admin_assets'))  
+    else:
+        return redirect(url_for('splashout'))
+
+    return render_template('admin-assets.html', form=form)
 
 if __name__ == "__main__":
     app.run(debug=True)

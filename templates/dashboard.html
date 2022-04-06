@@ -29,6 +29,7 @@
       </div>
   
     </li>
+    {% if current_user.is_authenticated  and current_user.is_admin == True %}
     <li class="nhsuk-grid-column-one-half nhsuk-card-group__item">
   
       <div class="nhsuk-card nhsuk-card--clickable">
@@ -41,18 +42,16 @@
       </div>
   
     </li>
-    {% if current_user.is_authenticated  and current_user.is_admin == True %}
     <li class="nhsuk-grid-column-one-half nhsuk-card-group__item">
   
       <div class="nhsuk-card nhsuk-card--clickable">
         <div class="nhsuk-card__content">
           <h2 class="nhsuk-card__heading nhsuk-heading-m">
-            <a class="nhsuk-card__link" href="/dashboard/admin-panel">Admin asset panel</a>
+            <a class="nhsuk-card__link" href="/dashboard/admin-assets">Admin add assets</a>
           </h2>
           <p class="nhsuk-card__description">Add, delete, update and maintain assets</p>
         </div>
       </div>
-  
     </li>
     {% endif %}
   </ul>

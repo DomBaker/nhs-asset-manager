@@ -1,9 +1,9 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, EmailField, SubmitField
-from wtforms.validators import InputRequired, Length, EqualTo, ValidationError
+from wtforms import StringField, PasswordField, EmailField, SubmitField, SelectField, IntegerField
+from wtforms.validators import InputRequired, Length, EqualTo, ValidationError, Optional
 from passlib.hash import pbkdf2_sha256
 
-from models import User
+from models import User, Assets
 
 
 #This is a custom validator, I have included two different methods of creating and using custom validators to show different approaches in my app
@@ -49,13 +49,27 @@ class LoginForm(FlaskForm):
 class UpdateForm(FlaskForm):
     """This is the Update Record Form"""
 
-    fname = StringField('fname_label', validators=[InputRequired(message="Please input your first name")])
-    lname = StringField('lname_label', validators=[InputRequired(message="Please input your last name")])
-    position = StringField('position_label', validators=[InputRequired(message="Please your new position")])
-    password = PasswordField('password_label', validators=[Length(min= 8, max=150, message="Password must be between 8 and 45 characters")])
-    cfm_password = PasswordField('cfm_password_label', validators=[EqualTo('password', message="passwords must match")])
+    fname = StringField('fname_label', validators=[InputRequired(message="Please input your first name"), Optional(strip_whitespace=True)])
+    lname = StringField('lname_label', validators=[InputRequired(message="Please input your last name"), Optional(strip_whitespace=True)])
+    position = StringField('position_label', validators=[InputRequired(message="Please your new position"), Optional(strip_whitespace=True)])
+    password = PasswordField('password_label', validators=[Length(min= 8, max=150, message="Password must be between 8 and 45 characters"), Optional(strip_whitespace=True)])
+    cfm_password = PasswordField('cfm_password_label', validators=[EqualTo('password', message="passwords must match"), Optional(strip_whitespace=True)])
+    is_admin = SelectField("account_type_label", choices=[('0', 'Standard'),('1', 'Admin')], validate_choice=True, coerce=int)
     submit_button = SubmitField('Update Account')
 
+
+# ASSET FORMS ---------------------------------------------------------------------------------------------------------------------------------------------
+
+class AddAsset(FlaskForm):
+    asset_name = StringField('asset_name_label', validators=[InputRequired(message="Please input an asset name")])
+    asset_type = SelectField("asset_type_label", choices=[('Laptop'),('Mobile'),('Other')], validate_choice=True)
+    serial_number = IntegerField('serial_number_label', validators=[InputRequired(message="Please input the asset serial number")])
+    submit_button = SubmitField('Add asset')
+
+    def validate_serial_number(self, serial_number):
+        asset_object = Assets.query.filter_by(serial_number=serial_number.data).first()
+        if asset_object:
+            raise ValidationError("Serial number already used, please make sure it is correct")
 class UpdateCurrentAssets(FlaskForm):
     """This is the Update Current Assets Form"""
 

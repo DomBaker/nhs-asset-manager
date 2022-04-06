@@ -1,5 +1,27 @@
 {% extends "base.html" %}
+{% from 'form_macro.html' import displayField %}
 
-{% block title %}Admin Panel{% endblock %}
+{% block title %}Admin assets panel{% endblock %}
 
-{% block content %}{% endblock %}
+{% block content %}
+<section class="nhsuk-section">
+
+    </section>
+
+    <h1>Register assets</h1>
+
+    <form action="{{ url_for('admin_assets')}}", method="POST" >
+        {{ displayField(form.asset_name, 'Asset Name', autocomplete="off", autofucus=true)}}
+        {{ displayField(form.asset_type)}}
+        {{ displayField(form.serial_number, 'Serial Number')}}
+        <div>
+            {{ form.submit_button(class_="nhsuk-button") }}
+        </div>
+        
+        {{ form.csrf_token }}
+    </form>
+
+    <hr class="nhsuk-section-break nhsuk-section-break--xl nhsuk-section-break--visible">
+    <section class="nhsuk-section"></section>
+
+{% endblock %}

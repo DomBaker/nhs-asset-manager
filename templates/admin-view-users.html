@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Admin all user view{% endblock %}
+
+{% block content %}
+<h1>All Registered Users</h1>
+<table class="nhsuk-table">
+    <caption class="nhsuk-table__caption">All registered users (Admin view only)</caption>
+    <thead role="rowgroup" class="nhsuk-table__head">
+      <tr role="row">
+        <th role="columnheader" class="" scope="col">
+            ID
+        </th>
+        <th role="columnheader" class="" scope="col">
+            Email
+        </th>
+        <th role="columnheader" class="" scope="col">
+            First Name
+        </th>
+        <th role="columnheader" class="" scope="col">
+            Last Name
+        </th>
+        <th role="columnheader" class="" scope="col">
+            Position
+        </th>  
+      </tr>
+    </thead>
+    <tbody class="nhsuk-table__body">
+        {% for user in all_users %}
+      <tr role="row" class="nhsuk-table__row">
+        <td class="nhsuk-table__cell">{{ user.id }}</td>
+        <td class="nhsuk-table__cell ">{{ user.email }}</td>
+        <td class="nhsuk-table__cell ">{{ user.fname }}</td>
+        <td class="nhsuk-table__cell ">{{ user.lname}}</td>
+        <td class="nhsuk-table__cell ">{{ user.position }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

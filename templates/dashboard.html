@@ -4,6 +4,7 @@
 
 {% block content %} 
 <h1>Dashboard</h1>
+{% if current_user.is_authenticated %}
 <ul class="nhsuk-grid-row nhsuk-card-group">
     <li class="nhsuk-grid-column-one-half nhsuk-card-group__item">
   
@@ -17,6 +18,18 @@
       </div>
   
     </li>
+    <li class="nhsuk-grid-column-one-half nhsuk-card-group__item">
+  
+      <div class="nhsuk-card nhsuk-card--clickable">
+        <div class="nhsuk-card__content">
+          <h2 class="nhsuk-card__heading nhsuk-heading-m">
+            <a class="nhsuk-card__link" href="/dashboard/available-assets">Available assets</a>
+          </h2>
+          <p class="nhsuk-card__description">Add an asset to your account</p>
+        </div>
+      </div>
+    </li>
+    {% endif %}
     {% if current_user.is_authenticated  and current_user.is_admin == True %}
     <li class="nhsuk-grid-column-one-half nhsuk-card-group__item">
   

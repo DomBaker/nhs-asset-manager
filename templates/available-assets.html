@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
-{% block title %}All Assets{% endblock %}
+{% block title %}Available Assets{% endblock %}
 
 {% block content %}
 
-<h1>All assets</h1>
+<h1>Available Assets</h1>
 <table class="nhsuk-table">
-    <caption class="nhsuk-table__caption">All assets company wide</caption>
+    <caption class="nhsuk-table__caption">Available Assets</caption>
     <thead role="rowgroup" class="nhsuk-table__head">
       <tr role="row">
         <th role="columnheader" class="" scope="col">
@@ -37,7 +37,7 @@
         <td class="nhsuk-table__cell ">{{ asset.asset_name }}</td>
         <td class="nhsuk-table__cell ">{{ asset.asset_type }}</td>
         <td class="nhsuk-table__cell ">{{ asset.serial_number }}</td>
-        <td class="nhsuk-table__cell "><a class="nhsuk-button nhsuk-button--secondary" href="/delete-asset/{{ asset.id }}">delete</a></td>
+        <td class="nhsuk-table__cell "><a class="nhsuk-button nhsuk-button--secondary" href="/assign/{{ asset.id }}">Assign</a></td>
       </tr>
       {% endfor %}
     </tbody>

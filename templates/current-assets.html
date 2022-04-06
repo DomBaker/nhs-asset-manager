@@ -37,6 +37,7 @@
         <td class="nhsuk-table__cell ">{{ asset.asset_name }}</td>
         <td class="nhsuk-table__cell ">{{ asset.asset_type }}</td>
         <td class="nhsuk-table__cell ">{{ asset.serial_number }}</td>
+        <td class="nhsuk-table__cell "><a class="nhsuk-button nhsuk-button--secondary" href="/unassign/{{ asset.id }}">Unassign</a></td>
       </tr>
         {% endif %}
     {% endfor %}

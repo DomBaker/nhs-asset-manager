@@ -153,17 +153,54 @@ def account_gone(id):
     try:
         database.session.delete(account_to_delete)
         database.session.commit()
-        flash("User deleted.")
+        flash("User deleted")
         return render_template('login.html', form=form, account_to_delete=account_to_delete)
     except:
         flash("Unable to delete account right now, try again.")
- 
+
+@app.route('/delete-asset/<int:id>', methods=['GET','POST'])
+def asset_gone(id):
+    asset_to_delete = database.session.query(Assets).get_or_404(id)
+
+    try:
+        database.session.delete(asset_to_delete)
+        database.session.commit()
+        flash("Asset deleted")
+        return render_template('all-assets.html', asset_to_delete=asset_to_delete)
+    except:
+        flash("Unable to delete asset as this time, try again.")
+
+@app.route('/unassign/<int:id>', methods=['GET','POST'])
+def asset_be_gone(id):
+    asset_to_unassign = database.session.query(Assets).get_or_404(id)
+
+    asset_to_unassign.owner_id = None
+
+    try:
+        database.session.commit()
+        flash("Asset Un-assigned")
+        return render_template('current-assets.html', asset_to_unassign=asset_to_unassign)
+    except:
+        flash("Unable to unassign asset as this time, try again.")
+
+@app.route('/assign/<int:id>', methods=['GET','POST'])
+def asset_be_assigned(id):
+    asset_to_assign = database.session.query(Assets).get_or_404(id)
+
+    asset_to_assign.owner_id = current_user.id
+
+    try:
+        database.session.commit()
+        flash("Asset assigned successfully")
+        return render_template('available-assets.html', asset_to_assign=asset_to_assign)
+    except:
+        flash("Unable to assign asset as this time, try again.")
 
 @app.route("/logout", methods=['GET'])
 def logout():
 
     logout_user()
-    flash('successfully logged out.')
+    flash('successfully logged out')
     return redirect(url_for('login'))
 
 
@@ -189,6 +226,14 @@ def all_assets():
         assets = Assets.query.all()
 
     return render_template('all-assets.html', assets=assets)
+
+@app.route("/dashboard/available-assets", methods=['GET'])
+def available():
+
+    if current_user.is_authenticated:
+        assets = database.session.query(Assets).filter_by(owner_id=None).all()
+
+    return render_template('available-assets.html', assets=assets)
 
 
 @app.route("/admin-view-all-users", methods=['GET', 'POST'])

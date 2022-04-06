@@ -1,7 +1,4 @@
-from urllib.request import DataHandler
-from flask_login import UserMixin
-
-from app import database
+from app import *
 
 # For some reason Heroku doesn't like imported versions of this so had to re-ref SQLAlchemy in this file.
 #database = SQLAlchemy()

@@ -18,10 +18,10 @@ The frontend is heavy based on the [NHSUK frontend](https://github.com/nhsuk/nhs
 
 ### Admin user
 - Email: admin@user.com
-- Password testing123
+- Password: testing123
 ### standard user
 - Email: standard@user.com
-- Password testing123
+- Password: testing123
 
 Also feel free to create your own standard user.
 

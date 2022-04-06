@@ -29,8 +29,8 @@ Also following guidance from [NHS Digital Service Manual](https://service-manual
 Also feel free to create your own standard user.
 
 ### Dummy users
-Generated using [Mockaroo](https://www.mockaroo.com/)
-Within the application you will find an array of dummy users these accounts can't be logged into as they're there for testing purpose only.
+- Generated using [Mockaroo](https://www.mockaroo.com/)
+- Within the application you will find an array of dummy users these accounts can't be logged into as they're there for testing purpose only. The main reason these accounts can't be logged into is because of the pbkdf2_sha256 password verification, because the data has been imported into the database these users passwords have not been hashed, therefore are inaccessible.
 
 
 

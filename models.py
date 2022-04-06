@@ -3,7 +3,8 @@ from flask_sqlalchemy import SQLAlchemy
 
 #from app import database
 
-# For some reason Heroku doesn't like imported versions of this so had to re-ref SQLAlchemy in this file.
+# For some reason Heroku doesn't like imported versions of this so had to re-ref SQLAlchemy in this file
+# I'm guessing this may have something to do with gunicorn also.
 database = SQLAlchemy()
 
 #Using UserMixin for additional functionality

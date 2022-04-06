@@ -20,7 +20,7 @@ def invalid_creds(form, field):
     elif not pbkdf2_sha256.verify(password_entered, user_object.password):
         raise ValidationError("Email or password is incorrect")
         
-
+# User Forms -------------------------------------------------------------------------------------------------------------------------------------
 class UserForm(FlaskForm):
     """This is the Registration Form"""
 

@@ -1,11 +1,10 @@
 from urllib.request import DataHandler
-from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 
-#from app import database
+from app import database
 
 # For some reason Heroku doesn't like imported versions of this so had to re-ref SQLAlchemy in this file.
-database = SQLAlchemy()
+#database = SQLAlchemy()
 
 #Using UserMixin for additional functionality
 class User(UserMixin, database.Model):

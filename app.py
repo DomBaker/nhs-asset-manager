@@ -1,4 +1,5 @@
 from flask import Flask, render_template, redirect, url_for, flash, request
+from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, current_user, logout_user
 import os
 
@@ -20,17 +21,22 @@ database = SQLAlchemy(app)
 login = LoginManager(app)
 login.init_app(app)
 
-
-
 #Used to track which user is logged in.
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
 
+#ERROR HANDLING -------------------------------------------------------------------------------------------------
+
+@app.errorhandler(404)
+def page_not_found(e):
+    # note that we set the 404 status explicitly
+    return render_template('errors/404.html'), 404
+
 #ROUTES ---------------------------------------------------------------------------------------------------------
 
 @app.route("/", methods=['GET', 'POST'])
-def index():
+def index():  
     if current_user.is_authenticated:
         return redirect(url_for('dashboard'))
 

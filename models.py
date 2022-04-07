@@ -1,11 +1,11 @@
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
 
-from app import app, database
+#from app import app, database
 
 # For some reason Heroku doesn't like imported versions of this so had to re-ref SQLAlchemy in this file
 # I'm guessing this may have something to do with gunicorn also.
-#database = SQLAlchemy()
+database = SQLAlchemy()
 
 #Using UserMixin for additional functionality
 class User(UserMixin, database.Model):

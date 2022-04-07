@@ -77,6 +77,7 @@ def register():
         database.session.add(user)
         #commit the changes to the database
         database.session.commit()
+        flash("Account Sucessfully Created")
         
         return redirect(url_for('login'))
 

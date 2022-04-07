@@ -47,5 +47,9 @@ You will need to attach your own Postgres to the os variable.
 - ```export DATABASE=YOUR DATABASE STRING```
 - You will need to uncomment the create database inside ```models.py``` to automatically create the db and tables
 
+## Testing
+- pytest 
+- run tests using ```pytest``` in the base directory
+
 
 

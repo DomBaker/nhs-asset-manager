@@ -36,6 +36,7 @@ Also feel free to create your own standard user.
 
 ## Steps to installing requirements and running the project locally
 - Open terminal
+- ``` git clone https://github.com/DomBaker/nhs-asset-manager.git ```  
 - ``` cd nhs-asset-manager ``` to the directory
 - ``` virtualenv env ``` to create a virtual environments
 - ``` . env/bin/activate ``` to activate the virtual env

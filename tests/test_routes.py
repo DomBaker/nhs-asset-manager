@@ -1,7 +1,7 @@
 from app import app
 
 # This could be improved by creating an instance of app instead of using the actual app, this would be better practice.
-# If I had more time this would of been a refactoring I would have done as I had started it and can be seen on a branch,
+# If I had more time this would have been refactored, I would have done as I had started it and can be seen on a branch,
 # in Github Branch: restruct/project
 
 def test_home_page():

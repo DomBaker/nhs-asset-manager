@@ -1,12 +1,11 @@
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
 
-
-#from app import database
+from app import app, database
 
 # For some reason Heroku doesn't like imported versions of this so had to re-ref SQLAlchemy in this file
 # I'm guessing this may have something to do with gunicorn also.
-database = SQLAlchemy()
+#database = SQLAlchemy()
 
 #Using UserMixin for additional functionality
 class User(UserMixin, database.Model):
@@ -21,14 +20,6 @@ class User(UserMixin, database.Model):
     password = database.Column(database.String(), nullable=False)
     is_admin = database.Column(database.Boolean, nullable=False, default=False)
 
-    # from passlib.hash import pbkdf2_sha256
-
-    # def __init__(self, email: str, fname: str, lname: str, position: str, password: str):
-    #     self.email = email
-    #     self.fname = fname
-    #     self.lname = lname
-    #     self.position = position
-    #     self.password_hashed = self.pbkdf2_sha256.hash(password)
 
 class Assets(database.Model):
     """ ASSET MODEL """
@@ -44,6 +35,10 @@ class Assets(database.Model):
     #     self.asset_name = asset_name
     #     self.asset_type = asset_type
     #     self.serial_number = serial_number
+
+
+#you will need to uncomment database.creat_all() to create a db locally, you will also need to set the export for DATABASE to your
+# database uri    
 
 #database.create_all()
 

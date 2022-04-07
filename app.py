@@ -4,7 +4,7 @@ from flask_login import LoginManager, login_user, current_user, logout_user
 import os
 
 from forms import *
-from models import *
+from models import User, Assets
 
 #With increasing complexity this file could be broken down into it's core sections, I haven't done this as the application is lightweight and unnecessary modularity can prove confusing.
 
@@ -162,6 +162,7 @@ def account_delete():
 def account_gone(id):
     form = UserForm()
     account_to_delete = database.session.query(User).get_or_404(id)
+    
 
     try:
         database.session.delete(account_to_delete)
@@ -179,6 +180,7 @@ def admin_account_gone(id):
     account_to_delete = database.session.query(User).get_or_404(id)
 
     try:
+        database.session.query(Assets).filter_by(owner_id=account_to_delete.id).update({'owner_id': None})
         database.session.delete(account_to_delete)
         database.session.commit()
         flash("User deleted")

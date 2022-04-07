@@ -4,6 +4,7 @@
 
 {% block content %}
 <h1>All Registered Users</h1>
+<p>Be aware making a user an admin gives them full access to all the functionality of this application, use this tool with care.</p>
 <table class="nhsuk-table">
     <caption class="nhsuk-table__caption">All registered users (Admin view only)</caption>
     <thead role="rowgroup" class="nhsuk-table__head">
@@ -37,10 +38,21 @@
         <td class="nhsuk-table__cell ">{{ user.fname }}</td>
         <td class="nhsuk-table__cell ">{{ user.lname}}</td>
         <td class="nhsuk-table__cell ">{{ user.position }}</td>
-        <td class="nhsuk-table__cell "><a class="nhsuk-button nhsuk-button--secondary" href="/admin-delete-account/{{ user.id }}">Delete Account</a></td>
+        <td class="nhsuk-table__cell ">
+          {% if user.is_admin == false %}
+          <a class="nhsuk-button" href="/admin/{{ user.id }}">Make Admin</a>
+          {% elif user.is_admin == true %}
+          <a class="nhsuk-button" href="/standard/{{ user.id }}">Make Standard</a>
+          {% endif %}
+          <a class="nhsuk-button nhsuk-button--secondary" href="/admin-delete-account/{{ user.id }}">Delete Account</a>
+        </td>
       </tr>
       {% endif %}
       {% endfor %}
     </tbody>
   </table>
+
+  <form action="/dashboard">
+    <input class="nhsuk-button" type="submit" value="Back to dashboard" />
+    </form>
 {% endblock %}

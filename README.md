@@ -16,7 +16,7 @@ Also following guidance from [NHS Digital Service Manual](https://service-manual
 
 ## Deployment
 - [Gunicorn](https://gunicorn.org/)
-- [heroku app](https://uni-nhs-asset-manager.herokuapp.com/login)
+- [Heroku deployed app](https://uni-nhs-asset-manager.herokuapp.com/login)
 
 ## users
 

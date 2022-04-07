@@ -13,9 +13,11 @@ Also following guidance from [NHS Digital Service Manual](https://service-manual
 - [Flask](https://flask.palletsprojects.com/en/2.1.x/)
 - [Heroku](https://devcenter.heroku.com/)
 - [Postgres](https://www.postgresql.org/docs/)
+- [Virtualenv](https://virtualenv.pypa.io/en/latest/)
 
 ## Deployment
 - [Gunicorn](https://gunicorn.org/)
+- [Heroku deployed app](https://uni-nhs-asset-manager.herokuapp.com/login)
 
 ## users
 
@@ -34,6 +36,7 @@ Also feel free to create your own standard user.
 
 ## Steps to installing requirements and running the project locally
 - Open terminal
+- ``` git clone https://github.com/DomBaker/nhs-asset-manager.git ```  
 - ``` cd nhs-asset-manager ``` to the directory
 - ``` virtualenv env ``` to create a virtual environments
 - ``` . env/bin/activate ``` to activate the virtual env

@@ -7,7 +7,7 @@
 <p>Be aware making a user an admin gives them full access to all the functionality of this application, use this tool
   with care. <b>You won't find your details in this section, if you wish to delete your account use the <a href="/account/{{current_user.id}}">account</a> section</b>.</p>
 <table class="nhsuk-table">
-  <caption class="nhsuk-table__caption">All registered users (Admin view only)</caption>
+  <caption class="nhsuk-table__caption">All registered users that don't have assets</caption>
   <thead role="rowgroup" class="nhsuk-table__head">
     <tr role="row">
       <th role="columnheader" class="" scope="col">
@@ -33,6 +33,7 @@
   <tbody class="nhsuk-table__body">
     {% for user in all_users %}
     {% if current_user != user %}
+    
     <tr role="row" class="nhsuk-table__row">
       <td class="nhsuk-table__cell">{{ user.id }}</td>
       <td class="nhsuk-table__cell ">{{ user.email }}</td>
@@ -52,6 +53,8 @@
     {% endfor %}
   </tbody>
 </table>
+
+
 
 <form action="/dashboard">
   <input class="nhsuk-button" type="submit" value="Back to dashboard" />

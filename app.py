@@ -34,6 +34,11 @@ def page_not_found(e):
     # note that we set the 404 status explicitly
     return render_template('errors/404.html'), 404
 
+@app.errorhandler(500)
+def page_not_found(e):
+    # note that we set the 500 status explicitly
+    return render_template('errors/500.html'), 500
+
 #ROUTES ---------------------------------------------------------------------------------------------------------
 
 @app.route("/", methods=['GET', 'POST'])
@@ -165,10 +170,12 @@ def account_gone(id):
         return render_template('login.html', form=form, account_to_delete=account_to_delete)
     except:
         flash("Unable to delete account right now, try again.")
+        return 500
 
 @app.route('/admin-delete-account/<int:id>', methods=['GET','POST'])
 def admin_account_gone(id):
     form = UserForm()
+    
     account_to_delete = database.session.query(User).get_or_404(id)
 
     try:
@@ -287,7 +294,8 @@ def available():
 def admin_view_all_users():
     if current_user.is_admin and current_user.is_authenticated:
         all_users = User.query.all()
-        return render_template('admin-view-users.html', all_users=all_users)
+        all_assets = Assets.query.all()
+        return render_template('admin-view-users.html', all_users=all_users, all_assets=all_assets)
     else:
         return redirect(url_for('admin_splash'))
 

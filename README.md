@@ -32,6 +32,20 @@ Also feel free to create your own standard user.
 - Generated using [Mockaroo](https://www.mockaroo.com/)
 - Within the application you will find an array of dummy users these accounts can't be logged into as they're there for testing purpose only. The main reason these accounts can't be logged into is because of the pbkdf2_sha256 password verification, because the data has been imported into the database these users passwords have not been hashed, therefore are inaccessible.
 
+## Steps to installing requirements and running the project locally
+- Open terminal
+- ``` cd nhs-asset-manager ``` to the directory
+- ``` virtualenv env ``` to create a virtual environments
+- ``` . env/bin/activate ``` to activate the virtual env
+- ``` pip install -r requirements.txt ``` to install the included requirements
+- ``` python app.py ``` will run the application
+- ``` 127.0.0.1:5000 ``` use this url to view the project in your browser
+
+## DB connection 
+You will need to attach your own Postgres to the os variable.
+- Open terminal
+- ```export DATABASE=YOUR DATABASE STRING```
+- You will need to uncomment the create database inside ```models.py``` to automatically create the db and tables
 
 
 

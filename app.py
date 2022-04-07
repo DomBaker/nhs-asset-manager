@@ -1,6 +1,6 @@
 from flask import Flask, render_template, redirect, url_for, flash, request
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager, login_user, current_user, logout_user, UserMixin
+from flask_login import LoginManager, login_user, current_user, logout_user
 import os
 
 from forms import *
@@ -214,6 +214,32 @@ def asset_be_assigned(id):
         return render_template('actions/assign.html', asset_to_assign=asset_to_assign)
     except:
         flash("Unable to assign asset as this time, try again.")
+
+@app.route('/admin/<int:id>', methods=['GET','POST'])
+def asset_be_assigned_admin(id):
+    user_to_give_admin = database.session.query(User).get_or_404(id)
+
+    user_to_give_admin.is_admin = True
+
+    try:
+        database.session.commit()
+        flash("Admin user successfully assigned")
+        return redirect(url_for('admin_view_all_users', id=current_user.id, user_to_give_admin=user_to_give_admin))
+    except:
+        flash("Unable to assign admin user as this time, try again.")
+
+@app.route('/standard/<int:id>', methods=['GET','POST'])
+def asset_be_assigned_standard(id):
+    user_to_give_standard = database.session.query(User).get_or_404(id)
+
+    user_to_give_standard.is_admin = False
+
+    try:
+        database.session.commit()
+        flash("Standard user successfully assigned")
+        return redirect(url_for('admin_view_all_users', id=current_user.id, user_to_give_standard=user_to_give_standard))
+    except:
+        flash("Unable to assign standard user as this time, try again.")
 
 @app.route("/logout", methods=['GET'])
 def logout():

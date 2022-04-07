@@ -12,6 +12,7 @@ from models import *
 
 #config app
 app = Flask(__name__)
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 #needs some kind of security on this
 app.secret_key = os.environ.get('SECRET_KEY')
 #hidden db URI stored directly in Heroku config vars - exported to local machine to run locally.

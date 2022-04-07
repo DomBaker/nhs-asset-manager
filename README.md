@@ -13,6 +13,7 @@ Also following guidance from [NHS Digital Service Manual](https://service-manual
 - [Flask](https://flask.palletsprojects.com/en/2.1.x/)
 - [Heroku](https://devcenter.heroku.com/)
 - [Postgres](https://www.postgresql.org/docs/)
+- [Virtualenv](https://virtualenv.pypa.io/en/latest/)
 
 ## Deployment
 - [Gunicorn](https://gunicorn.org/)

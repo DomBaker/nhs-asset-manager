@@ -1,6 +1,6 @@
 from flask import Flask, render_template, redirect, url_for, flash, request
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager, login_user, current_user, logout_user, UserMixin
+from flask_login import LoginManager, login_user, current_user, logout_user
 import os
 
 from forms import *

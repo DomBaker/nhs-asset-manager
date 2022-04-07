@@ -1,6 +1,7 @@
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
 
+
 #from app import database
 
 # For some reason Heroku doesn't like imported versions of this so had to re-ref SQLAlchemy in this file
@@ -20,6 +21,15 @@ class User(UserMixin, database.Model):
     password = database.Column(database.String(), nullable=False)
     is_admin = database.Column(database.Boolean, nullable=False, default=False)
 
+    from passlib.hash import pbkdf2_sha256
+
+    def __init__(self, email: str, fname: str, lname: str, position: str, plain_password: str):
+        self.email = email
+        self.fname = fname
+        self.lname = lname
+        self.position = position
+        self.password_hashed = self.pbkdf2_sha256.hash(plain_password)
+
 class Assets(database.Model):
     """ ASSET MODEL """
 
@@ -29,6 +39,11 @@ class Assets(database.Model):
     owner_id = database.Column(database.Integer, database.ForeignKey('users.id'), nullable=True)
     asset_type = database.Column(database.String(), nullable=False)
     serial_number = database.Column(database.Integer, unique=True, nullable=False)
+
+    def __init__(self, asset_name: str, asset_type: str, serial_number: int):
+        self.asset_name = asset_name
+        self.asset_type = asset_type
+        self.serial_number = serial_number
 
 #database.create_all()
 
